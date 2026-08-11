@@ -1,0 +1,106 @@
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model Location {
+  id        String   @id @default(uuid())
+  name      String
+  country   String
+  state     String?
+  latitude  Float
+  longitude Float
+  timezone  String
+  createdAt DateTime @default(now())
+}
+
+model NotificationSubscription {
+  id         String   @id @default(uuid())
+  endpoint   String   @unique
+  p256dh     String
+  auth       String
+  location   String?  @default("Hyderabad, India")
+  latitude   Float?   @default(17.385)
+  longitude  Float?   @default(78.4866)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+  settings   NotificationSettings?
+}
+
+model NotificationSettings {
+  id                 String                   @id @default(uuid())
+  subscriptionId     String                   @unique
+  subscription       NotificationSubscription @relation(fields: [subscriptionId], references: [id], onDelete: Cascade)
+  enableBrowser      Boolean                  @default(true)
+  enableSMS          Boolean                  @default(false)
+  enableWhatsApp     Boolean                  @default(false)
+  phoneNumber        String?
+  whatsappNumber     String?
+  rainAlerts         Boolean                  @default(true)
+  heavyRainAlerts    Boolean                  @default(true)
+  thunderstormAlerts Boolean                  @default(true)
+  temperatureAlerts Boolean                  @default(true)
+  strongWindAlerts   Boolean                  @default(true)
+  airQualityAlerts   Boolean                  @default(true)
+  dailySummary       Boolean                  @default(false)
+}
+
+model ScheduledReport {
+  id          String   @id @default(uuid())
+  location    String
+  latitude    Float
+  longitude   Float
+  reportType  String   // current, today, tomorrow, rain, severe, summary
+  channel     String   // browser, sms, whatsapp
+  recipient   String?  // phone number or subscription endpoint
+  time        String   // HH:mm format (e.g. 07:00, 19:00)
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model ReportHistory {
+  id          String   @id @default(uuid())
+  location    String
+  reportType  String
+  channel     String
+  recipient   String?
+  status      String   @default("Sent")
+  content     String
+  createdAt   DateTime @default(now())
+}
+
+model MessageDelivery {
+  id                String   @id @default(uuid())
+  channel           String   // sms, whatsapp, push
+  recipient         String
+  messageType       String   // alert, report, test
+  status            String   // Queued, Sent, Delivered, Failed
+  providerMessageId String?
+  errorMessage      String?
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+}
+
+model Notification {
+  id        String   @id @default(uuid())
+  title     String
+  message   String
+  type      String   @default("info") // info, rain, thunderstorm, heat, wind
+  location  String
+  isRead    Boolean  @default(false)
+  createdAt DateTime @default(now())
+}
+
+model WeatherCache {
+  id        String   @id @default(uuid())
+  cacheKey  String   @unique
+  data      String   // JSON stringified weather response
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+}
+
