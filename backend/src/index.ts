@@ -31,6 +31,8 @@ app.get('/', (req, res) => {
 });
 app.use('/api', healthRouter);
 app.use('/api', apiRouter);
+app.use('/', healthRouter);
+app.use('/', apiRouter);
 
 // Error Handling Middleware
 app.use(errorHandler);
