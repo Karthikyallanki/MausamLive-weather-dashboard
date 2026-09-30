@@ -1,9 +1,8 @@
-'use client';
-
-import React from 'react';
-import { CloudRain, Cloud, Umbrella, Sparkles } from 'lucide-react';
+import React, { useState } from 'react';
+import { CloudRain, Cloud, Umbrella, Sparkles, HelpCircle } from 'lucide-react';
 import { CurrentWeather, UnitSystem } from '../types/weather';
 import { formatRain } from '../lib/utils';
+import { WeatherExplanationModal } from './WeatherExplanationModal';
 
 interface RainCardProps {
   current: CurrentWeather;
@@ -11,6 +10,9 @@ interface RainCardProps {
 }
 
 export const RainCard: React.FC<RainCardProps> = ({ current, unit }) => {
+  const [explainMetricKey, setExplainMetricKey] = useState<string | null>(null);
+  const [explainValue, setExplainValue] = useState<any>(null);
+
   const rainProb = current.rainProbability ?? 0;
   const rainfall = current.rainfall ?? 0;
 
@@ -36,9 +38,15 @@ export const RainCard: React.FC<RainCardProps> = ({ current, unit }) => {
               <p className="text-xs text-slate-500 dark:text-slate-400">{intensityMessage}</p>
             </div>
           </div>
-          <span className="text-xs font-bold px-2.5 py-1 rounded-full bg-blue-500/10 text-blue-600 dark:text-blue-400">
-            {rainProb}% Chance
-          </span>
+          <button
+            onClick={() => {
+              setExplainMetricKey('Rain Probability');
+              setExplainValue(`${rainProb}%`);
+            }}
+            className="text-[11px] font-bold px-2.5 py-1 rounded-full bg-blue-500/10 hover:bg-blue-500/20 text-blue-600 dark:text-blue-400 flex items-center gap-1 transition-all"
+          >
+            <HelpCircle className="w-3 h-3" /> Explain {rainProb}%
+          </button>
         </div>
 
         {/* Rain Probability Bar */}
@@ -57,10 +65,18 @@ export const RainCard: React.FC<RainCardProps> = ({ current, unit }) => {
 
         {/* Stats Grid */}
         <div className="grid grid-cols-2 gap-3 mt-4">
-          <div className="p-3 rounded-2xl bg-sky-500/5 dark:bg-sky-950/20 border border-sky-500/10 flex items-center gap-3">
+          <div
+            onClick={() => {
+              setExplainMetricKey('Rainfall');
+              setExplainValue(formatRain(rainfall, unit));
+            }}
+            className="p-3 rounded-2xl bg-sky-500/5 dark:bg-sky-950/20 border border-sky-500/10 hover:border-sky-500/30 flex items-center gap-3 cursor-pointer transition-all"
+          >
             <Umbrella className="w-6 h-6 text-sky-500" />
             <div>
-              <span className="text-[10px] font-medium text-slate-400 block">Precipitation Volume</span>
+              <span className="text-[10px] font-medium text-slate-400 flex items-center gap-1">
+                Precipitation <HelpCircle className="w-2.5 h-2.5 text-sky-400" />
+              </span>
               <span className="text-sm font-bold text-slate-900 dark:text-white">
                 {formatRain(rainfall, unit)}
               </span>
@@ -81,6 +97,14 @@ export const RainCard: React.FC<RainCardProps> = ({ current, unit }) => {
         <Sparkles className="w-3.5 h-3.5 text-blue-400" />
         <span>Real-time precipitation calculation via Open-Meteo</span>
       </div>
+
+      <WeatherExplanationModal
+        isOpen={!!explainMetricKey}
+        onClose={() => setExplainMetricKey(null)}
+        metric={explainMetricKey || ''}
+        value={explainValue}
+        metricTitle={explainMetricKey || ''}
+      />
     </div>
   );
 };

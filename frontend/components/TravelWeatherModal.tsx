@@ -5,6 +5,7 @@ import { Plane, Calendar, MapPin, Send, X, Loader2, Sun, CloudRain, Wind, Thermo
 import { LocationResult, DailyForecastItem, UnitSystem } from '../types/weather';
 import { searchLocations, fetchWeather, sendSMSReport, sendWhatsAppReport, triggerTestNotification } from '../services/api';
 import { celsiusToFahrenheit, kmhToMph, mmToInches } from '../lib/utils';
+import { TravelWeatherAdvisor } from './TravelWeatherAdvisor';
 
 interface TravelWeatherModalProps {
   isOpen: boolean;
@@ -200,6 +201,17 @@ export const TravelWeatherModal: React.FC<TravelWeatherModalProps> = ({ isOpen, 
                   </button>
                 </div>
               </div>
+
+              {/* Use Case 5: Travel Weather RAG Advisor */}
+              <TravelWeatherAdvisor
+                destination={selectedDestination.name}
+                travelDate={travelDate}
+                destinationWeather={{
+                  temperature: forecastItem.tempMax,
+                  rain_probability: forecastItem.rainProbability,
+                  condition: forecastItem.condition,
+                }}
+              />
             </div>
           ) : null}
         </div>

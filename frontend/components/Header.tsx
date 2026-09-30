@@ -13,6 +13,7 @@ import {
   FileText,
   History,
   Plane,
+  Sparkles,
 } from 'lucide-react';
 import { LocationResult, UnitSystem } from '../types/weather';
 import { searchLocations } from '../services/api';
@@ -29,6 +30,7 @@ interface HeaderProps {
   onOpenReportCenter: () => void;
   onOpenHistory: () => void;
   onOpenTravelMode?: () => void;
+  onOpenAskAssistant?: () => void;
   unreadCount?: number;
 }
 
@@ -44,6 +46,7 @@ export const Header: React.FC<HeaderProps> = ({
   onOpenReportCenter,
   onOpenHistory,
   onOpenTravelMode,
+  onOpenAskAssistant,
   unreadCount = 0,
 }) => {
   const [query, setQuery] = useState('');
@@ -185,6 +188,18 @@ export const Header: React.FC<HeaderProps> = ({
 
         {/* Desktop Controls */}
         <div className="hidden md:flex items-center space-x-3">
+          {/* Ask Assistant RAG Button */}
+          {onOpenAskAssistant && (
+            <button
+              onClick={onOpenAskAssistant}
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-gradient-to-r from-sky-500 to-indigo-600 hover:from-sky-400 hover:to-indigo-500 text-white font-extrabold text-xs shadow-md transition"
+              title="Ask MausamLive AI Weather Assistant"
+            >
+              <Sparkles className="w-3.5 h-3.5 animate-pulse text-amber-300" />
+              Ask MausamLive
+            </button>
+          )}
+
           {/* Report Center Button */}
           <button
             onClick={onOpenReportCenter}

@@ -20,6 +20,13 @@ import {
   getMessageHistory,
   triggerTestAlert,
 } from '../controllers/messageController';
+import {
+  handleRagQuery,
+  handleRagExplain,
+  handleRagAdvice,
+  handleRagAlertExplanation,
+  handleRagTravelAdvice,
+} from '../controllers/ragController';
 import { rateLimiter } from '../middleware/rateLimiter';
 
 const router = Router();
@@ -49,5 +56,12 @@ router.post('/reports/schedule', scheduleReport);
 router.get('/reports/history', getReportHistory);
 router.get('/messages/history', getMessageHistory);
 router.post('/alerts/test', triggerTestAlert);
+
+// Hybrid RAG Pipeline Endpoints
+router.post('/rag/query', rateLimiter(20, 60000), handleRagQuery);
+router.post('/rag/explain', rateLimiter(20, 60000), handleRagExplain);
+router.post('/rag/advice', rateLimiter(20, 60000), handleRagAdvice);
+router.post('/rag/alert-explanation', rateLimiter(20, 60000), handleRagAlertExplanation);
+router.post('/rag/travel-advice', rateLimiter(20, 60000), handleRagTravelAdvice);
 
 export default router;

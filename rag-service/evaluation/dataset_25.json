@@ -1,0 +1,31 @@
+[
+  { "id": 1, "category": "Rainfall", "question": "What does a 70% rain probability mean?", "expected_source": "rain_probability_guide.md" },
+  { "id": 2, "category": "Rainfall", "question": "How is light rain classified in mm per hour?", "expected_source": "rain_probability_guide.md" },
+  { "id": 3, "category": "Rainfall", "question": "Does 80% rain probability mean it will rain for 80% of the day?", "expected_source": "rain_probability_guide.md" },
+  { "id": 4, "category": "Rainfall", "question": "What amount of rain per hour causes urban flooding risk?", "expected_source": "rain_probability_guide.md" },
+  { "id": 5, "category": "Rainfall", "question": "Should I carry an umbrella when rain probability is 75%?", "expected_source": "rain_probability_guide.md" },
+
+  { "id": 6, "category": "Temperature & Heat", "question": "Why does high humidity make air feel hotter than the actual temperature?", "expected_source": "heat_humidity_feelslike.md" },
+  { "id": 7, "category": "Temperature & Heat", "question": "What is the heat index danger threshold for heat exhaustion?", "expected_source": "heat_humidity_feelslike.md" },
+  { "id": 8, "category": "Temperature & Heat", "question": "What is the wind chill factor?", "expected_source": "heat_humidity_feelslike.md" },
+  { "id": 9, "category": "Temperature & Heat", "question": "Why does sweat stop cooling the body in high humidity?", "expected_source": "heat_humidity_feelslike.md" },
+  { "id": 10, "category": "Temperature & Heat", "question": "What happens when heat index exceeds 54°C?", "expected_source": "heat_humidity_feelslike.md" },
+
+  { "id": 11, "category": "AQI & UV", "question": "What does AQI 150 mean for sensitive groups?", "expected_source": "aqi_guidelines.md" },
+  { "id": 12, "category": "AQI & UV", "question": "What protection is needed for UV Index 8 (Very High)?", "expected_source": "uv_index_safety.md" },
+  { "id": 13, "category": "AQI & UV", "question": "What is considered a Good AQI range?", "expected_source": "aqi_guidelines.md" },
+  { "id": 14, "category": "AQI & UV", "question": "At what UV index can unprotected skin burn within minutes?", "expected_source": "uv_index_safety.md" },
+  { "id": 15, "category": "AQI & UV", "question": "What precautions should be taken when AQI is Hazardous (301+)?", "expected_source": "aqi_guidelines.md" },
+
+  { "id": 16, "category": "Safety & Alerts", "question": "What is the 30/30 safety rule for thunderstorms?", "expected_source": "thunderstorm_safety.md" },
+  { "id": 17, "category": "Safety & Alerts", "question": "Is it safe to use plumbing pipes or corded phones during a thunderstorm?", "expected_source": "thunderstorm_safety.md" },
+  { "id": 18, "category": "Safety & Alerts", "question": "What wind speed range is classified as a High Wind or Gale on the Beaufort Scale?", "expected_source": "wind_scales_warnings.md" },
+  { "id": 19, "category": "Safety & Alerts", "question": "What should you do if caught outdoors without shelter during lightning?", "expected_source": "thunderstorm_safety.md" },
+  { "id": 20, "category": "Safety & Alerts", "question": "What damage occurs during a severe gale (76 to 117 km/h)?", "expected_source": "wind_scales_warnings.md" },
+
+  { "id": 21, "category": "General & Travel", "question": "What items should be checked 48 hours prior to travel departure?", "expected_source": "travel_weather_prep.md" },
+  { "id": 22, "category": "General & Travel", "question": "Why does UV exposure double at high altitude travel destinations?", "expected_source": "travel_weather_prep.md" },
+  { "id": 23, "category": "General & Travel", "question": "What apparel strategy adapts well to microclimates?", "expected_source": "travel_weather_prep.md" },
+  { "id": 24, "category": "General & Travel", "question": "When should extra transit buffer time be allowed during travel?", "expected_source": "travel_weather_prep.md" },
+  { "id": 25, "category": "General & Travel", "question": "What rain protection should be packed if destination rain probability exceeds 50%?", "expected_source": "travel_weather_prep.md" }
+]

@@ -21,6 +21,8 @@ import {
 } from 'lucide-react';
 import { CurrentWeather as CurrentWeatherType, UnitSystem } from '../types/weather';
 import { formatTemp, formatWind, formatTime, formatDate } from '../lib/utils';
+import { WeatherExplanationModal } from './WeatherExplanationModal';
+import { HelpCircle } from 'lucide-react';
 
 interface CurrentWeatherProps {
   current: CurrentWeatherType;
@@ -72,6 +74,9 @@ export const CurrentWeatherCard: React.FC<CurrentWeatherProps> = ({
   tempMax,
   tempMin,
 }) => {
+  const [explainMetricKey, setExplainMetricKey] = React.useState<string | null>(null);
+  const [explainValue, setExplainValue] = React.useState<any>(null);
+
   return (
     <div className="relative overflow-hidden glass-card rounded-3xl p-6 lg:p-8 shadow-xl transition-all">
       {/* Background Subtle Gradient Overlay */}
@@ -118,10 +123,19 @@ export const CurrentWeatherCard: React.FC<CurrentWeatherProps> = ({
             {renderWeatherIcon(current.icon, 'w-20 h-20 lg:w-24 lg:h-24')}
           </div>
           <div>
-            <div className="flex items-baseline">
+            <div className="flex items-baseline gap-2">
               <span className="text-5xl lg:text-7xl font-black text-slate-900 dark:text-white tracking-tighter">
                 {formatTemp(current.temperature, unit)}
               </span>
+              <button
+                onClick={() => {
+                  setExplainMetricKey('Temperature');
+                  setExplainValue(`${formatTemp(current.temperature, unit)} (Feels like ${formatTemp(current.feelsLike, unit)})`);
+                }}
+                className="text-xs bg-sky-500/10 hover:bg-sky-500/20 border border-sky-500/30 text-sky-400 font-bold px-2.5 py-1 rounded-lg flex items-center gap-1 transition-all"
+              >
+                <HelpCircle className="w-3 h-3" /> Explain
+              </button>
             </div>
             <div className="text-lg font-bold text-sky-600 dark:text-sky-400 capitalize mt-1">
               {current.condition}
@@ -168,6 +182,14 @@ export const CurrentWeatherCard: React.FC<CurrentWeatherProps> = ({
           Updated: {lastUpdated ? formatTime(lastUpdated, current.timezone) : 'Just now'}
         </span>
       </div>
+
+      <WeatherExplanationModal
+        isOpen={!!explainMetricKey}
+        onClose={() => setExplainMetricKey(null)}
+        metric={explainMetricKey || ''}
+        value={explainValue}
+        metricTitle={explainMetricKey || ''}
+      />
     </div>
   );
 };

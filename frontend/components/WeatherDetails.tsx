@@ -1,6 +1,4 @@
-'use client';
-
-import React from 'react';
+import React, { useState } from 'react';
 import {
   Droplets,
   Wind,
@@ -10,9 +8,11 @@ import {
   Sunrise,
   Sunset,
   Info,
+  HelpCircle,
 } from 'lucide-react';
 import { CurrentWeather, UnitSystem } from '../types/weather';
 import { formatWind, formatTime } from '../lib/utils';
+import { WeatherExplanationModal } from './WeatherExplanationModal';
 
 interface WeatherDetailsProps {
   current: CurrentWeather;
@@ -20,6 +20,9 @@ interface WeatherDetailsProps {
 }
 
 export const WeatherDetails: React.FC<WeatherDetailsProps> = ({ current, unit }) => {
+  const [explainMetricKey, setExplainMetricKey] = useState<string | null>(null);
+  const [explainValue, setExplainValue] = useState<any>(null);
+
   let uvCategory = 'Low';
   if (current.uvIndex >= 3 && current.uvIndex < 6) uvCategory = 'Moderate';
   else if (current.uvIndex >= 6 && current.uvIndex < 8) uvCategory = 'High';
@@ -40,9 +43,17 @@ export const WeatherDetails: React.FC<WeatherDetailsProps> = ({ current, unit })
 
       <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
         {/* Humidity */}
-        <div className="p-4 rounded-2xl glass-card border border-slate-200/60 dark:border-slate-800 flex flex-col justify-between">
+        <div
+          onClick={() => {
+            setExplainMetricKey('Humidity');
+            setExplainValue(`${current.humidity}%`);
+          }}
+          className="p-4 rounded-2xl glass-card border border-slate-200/60 dark:border-slate-800 hover:border-sky-500/40 flex flex-col justify-between cursor-pointer transition-all"
+        >
           <div className="flex items-center justify-between text-slate-500 dark:text-slate-400 mb-2">
-            <span className="text-xs font-semibold">Humidity</span>
+            <span className="text-xs font-semibold flex items-center gap-1">
+              Humidity <HelpCircle className="w-3 h-3 text-sky-400" />
+            </span>
             <Droplets className="w-4 h-4 text-blue-500" />
           </div>
           <span className="text-2xl font-black text-slate-900 dark:text-white">{current.humidity}%</span>
@@ -52,9 +63,17 @@ export const WeatherDetails: React.FC<WeatherDetailsProps> = ({ current, unit })
         </div>
 
         {/* Wind */}
-        <div className="p-4 rounded-2xl glass-card border border-slate-200/60 dark:border-slate-800 flex flex-col justify-between">
+        <div
+          onClick={() => {
+            setExplainMetricKey('Wind Speed');
+            setExplainValue(formatWind(current.windSpeed, unit));
+          }}
+          className="p-4 rounded-2xl glass-card border border-slate-200/60 dark:border-slate-800 hover:border-sky-500/40 flex flex-col justify-between cursor-pointer transition-all"
+        >
           <div className="flex items-center justify-between text-slate-500 dark:text-slate-400 mb-2">
-            <span className="text-xs font-semibold">Wind</span>
+            <span className="text-xs font-semibold flex items-center gap-1">
+              Wind <HelpCircle className="w-3 h-3 text-sky-400" />
+            </span>
             <Wind className="w-4 h-4 text-sky-500" />
           </div>
           <span className="text-2xl font-black text-slate-900 dark:text-white">
@@ -64,9 +83,17 @@ export const WeatherDetails: React.FC<WeatherDetailsProps> = ({ current, unit })
         </div>
 
         {/* Pressure */}
-        <div className="p-4 rounded-2xl glass-card border border-slate-200/60 dark:border-slate-800 flex flex-col justify-between">
+        <div
+          onClick={() => {
+            setExplainMetricKey('Pressure');
+            setExplainValue(`${current.pressure} hPa`);
+          }}
+          className="p-4 rounded-2xl glass-card border border-slate-200/60 dark:border-slate-800 hover:border-sky-500/40 flex flex-col justify-between cursor-pointer transition-all"
+        >
           <div className="flex items-center justify-between text-slate-500 dark:text-slate-400 mb-2">
-            <span className="text-xs font-semibold">Pressure</span>
+            <span className="text-xs font-semibold flex items-center gap-1">
+              Pressure <HelpCircle className="w-3 h-3 text-sky-400" />
+            </span>
             <Gauge className="w-4 h-4 text-indigo-500" />
           </div>
           <span className="text-2xl font-black text-slate-900 dark:text-white">{current.pressure} hPa</span>
@@ -86,9 +113,17 @@ export const WeatherDetails: React.FC<WeatherDetailsProps> = ({ current, unit })
         </div>
 
         {/* UV Index */}
-        <div className="p-4 rounded-2xl glass-card border border-slate-200/60 dark:border-slate-800 flex flex-col justify-between">
+        <div
+          onClick={() => {
+            setExplainMetricKey('UV Index');
+            setExplainValue(`${current.uvIndex} (${uvCategory})`);
+          }}
+          className="p-4 rounded-2xl glass-card border border-slate-200/60 dark:border-slate-800 hover:border-sky-500/40 flex flex-col justify-between cursor-pointer transition-all"
+        >
           <div className="flex items-center justify-between text-slate-500 dark:text-slate-400 mb-2">
-            <span className="text-xs font-semibold">UV Index</span>
+            <span className="text-xs font-semibold flex items-center gap-1">
+              UV Index <HelpCircle className="w-3 h-3 text-sky-400" />
+            </span>
             <Sun className="w-4 h-4 text-amber-500" />
           </div>
           <div className="flex items-baseline gap-2">
@@ -120,6 +155,14 @@ export const WeatherDetails: React.FC<WeatherDetailsProps> = ({ current, unit })
           </div>
         </div>
       </div>
+
+      <WeatherExplanationModal
+        isOpen={!!explainMetricKey}
+        onClose={() => setExplainMetricKey(null)}
+        metric={explainMetricKey || ''}
+        value={explainValue}
+        metricTitle={explainMetricKey || ''}
+      />
     </div>
   );
 };

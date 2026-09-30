@@ -1,14 +1,16 @@
-'use client';
-
-import React from 'react';
-import { Wind, ShieldAlert, Activity } from 'lucide-react';
+import React, { useState } from 'react';
+import { Wind, ShieldAlert, Activity, HelpCircle } from 'lucide-react';
 import { AirQualityData } from '../types/weather';
+import { WeatherExplanationModal } from './WeatherExplanationModal';
 
 interface AirQualityCardProps {
   airQuality: AirQualityData;
 }
 
 export const AirQualityCard: React.FC<AirQualityCardProps> = ({ airQuality }) => {
+  const [explainMetricKey, setExplainMetricKey] = useState<string | null>(null);
+  const [explainValue, setExplainValue] = useState<any>(null);
+
   const isAvailable = airQuality.aqiStatus !== 'Data unavailable';
 
   let statusBg = 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400';
@@ -30,17 +32,28 @@ export const AirQualityCard: React.FC<AirQualityCardProps> = ({ airQuality }) =>
           </div>
         </div>
 
-        <span className={`text-xs font-extrabold px-3 py-1 rounded-full ${statusBg}`}>
-          {airQuality.aqiStatus}
-        </span>
+        <button
+          onClick={() => {
+            setExplainMetricKey('Air Quality Index');
+            setExplainValue(`AQI ${airQuality.aqi} (${airQuality.aqiStatus})`);
+          }}
+          className="text-xs font-bold px-3 py-1 rounded-full bg-teal-500/10 hover:bg-teal-500/20 text-teal-600 dark:text-teal-400 flex items-center gap-1 transition-all"
+        >
+          <HelpCircle className="w-3 h-3" /> Explain AQI
+        </button>
       </div>
 
       {isAvailable ? (
         <div>
           {/* AQI Score */}
-          <div className="flex items-baseline gap-3 my-3">
-            <span className="text-4xl font-black text-slate-900 dark:text-white">{airQuality.aqi}</span>
-            <span className="text-xs text-slate-500 dark:text-slate-400">US AQI Standard</span>
+          <div className="flex items-baseline justify-between my-3">
+            <div className="flex items-baseline gap-3">
+              <span className="text-4xl font-black text-slate-900 dark:text-white">{airQuality.aqi}</span>
+              <span className="text-xs text-slate-500 dark:text-slate-400">US AQI Standard</span>
+            </div>
+            <span className={`text-xs font-extrabold px-3 py-1 rounded-full ${statusBg}`}>
+              {airQuality.aqiStatus}
+            </span>
           </div>
 
           {/* Pollutants Breakdown Grid */}
@@ -85,6 +98,14 @@ export const AirQualityCard: React.FC<AirQualityCardProps> = ({ airQuality }) =>
           </p>
         </div>
       )}
+
+      <WeatherExplanationModal
+        isOpen={!!explainMetricKey}
+        onClose={() => setExplainMetricKey(null)}
+        metric={explainMetricKey || ''}
+        value={explainValue}
+        metricTitle={explainMetricKey || ''}
+      />
     </div>
   );
 };

@@ -27,6 +27,14 @@ yarn-debug.log*
 yarn-error.log*
 *.log
 
+# Python & Cache
+__pycache__/
+*.pyc
+.pytest_cache/
+venv/
+.venv/
+chroma_db/
+
 # OS / Editor metadata
 .DS_Store
 Thumbs.db

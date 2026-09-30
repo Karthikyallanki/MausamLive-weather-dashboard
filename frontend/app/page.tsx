@@ -28,6 +28,8 @@ import { SunTracker } from '../components/SunTracker';
 import { ComfortIndexCard } from '../components/ComfortIndexCard';
 import { DataQualityPanel } from '../components/DataQualityPanel';
 import { TravelWeatherModal } from '../components/TravelWeatherModal';
+import { AskWeatherAssistant } from '../components/AskWeatherAssistant';
+import { WeatherAdvisorCard } from '../components/WeatherAdvisorCard';
 
 const HourlyForecast = dynamic(
   () => import('../components/HourlyForecast').then((mod) => mod.HourlyForecast),
@@ -58,6 +60,7 @@ export default function Home() {
   const [isReportCenterOpen, setIsReportCenterOpen] = useState<boolean>(false);
   const [isHistoryDrawerOpen, setIsHistoryDrawerOpen] = useState<boolean>(false);
   const [isTravelModalOpen, setIsTravelModalOpen] = useState<boolean>(false);
+  const [isAskAssistantOpen, setIsAskAssistantOpen] = useState<boolean>(false);
 
   useEffect(() => {
     if (darkMode) {
@@ -145,6 +148,7 @@ export default function Home() {
         onOpenReportCenter={() => setIsReportCenterOpen(true)}
         onOpenHistory={() => setIsHistoryDrawerOpen(true)}
         onOpenTravelMode={() => setIsTravelModalOpen(true)}
+        onOpenAskAssistant={() => setIsAskAssistantOpen((prev) => !prev)}
       />
 
       {/* Main Content Area */}
@@ -155,6 +159,20 @@ export default function Home() {
             <AlertCircle className="w-5 h-5 flex-none" />
             <span>{error}</span>
           </div>
+        )}
+
+        {/* Ask MausamLive RAG Weather Assistant Widget */}
+        <AskWeatherAssistant
+          currentLocationName={selectedLocation.name}
+          liveWeatherData={weatherData?.current}
+        />
+
+        {/* Personalized Weather Advisor (Use Case 3) */}
+        {weatherData && (
+          <WeatherAdvisorCard
+            locationName={selectedLocation.name}
+            currentWeather={weatherData.current}
+          />
         )}
 
         {/* Loading State */}

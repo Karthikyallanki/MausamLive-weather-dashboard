@@ -160,3 +160,55 @@ export async function fetchMessageDeliveryHistory() {
   const data = await res.json();
   return data.data || [];
 }
+
+// --- RAG HYBRID PIPELINE CALLS ---
+
+export async function queryRag(query: string, location?: string, liveWeather?: any) {
+  const res = await fetch(`${API_BASE_URL}/rag/query`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ query, location, liveWeather }),
+  });
+  if (!res.ok) throw new Error('RAG Query request failed');
+  return await res.json();
+}
+
+export async function explainMetric(metric: string, value?: any, query?: string) {
+  const res = await fetch(`${API_BASE_URL}/rag/explain`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ metric, value, query }),
+  });
+  if (!res.ok) throw new Error('Explain metric request failed');
+  return await res.json();
+}
+
+export async function getWeatherAdvice(location: string, liveWeather: any, question?: string) {
+  const res = await fetch(`${API_BASE_URL}/rag/advice`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ location, liveWeather, question }),
+  });
+  if (!res.ok) throw new Error('Weather advice request failed');
+  return await res.json();
+}
+
+export async function explainWeatherAlert(alertType: string, location: string, liveWeather: any) {
+  const res = await fetch(`${API_BASE_URL}/rag/alert-explanation`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ alertType, location, liveWeather }),
+  });
+  if (!res.ok) throw new Error('Alert explanation request failed');
+  return await res.json();
+}
+
+export async function getTravelWeatherAdvice(destination: string, liveWeather: any, question?: string) {
+  const res = await fetch(`${API_BASE_URL}/rag/travel-advice`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ destination, liveWeather, question }),
+  });
+  if (!res.ok) throw new Error('Travel advice request failed');
+  return await res.json();
+}
