@@ -1,7 +1,11 @@
 import axios from 'axios';
 import { logger } from '../utils/logger';
 
-const RAG_SERVICE_URL = process.env.RAG_SERVICE_URL || 'http://localhost:8000';
+const getRagUrl = (path: string): string => {
+  const baseUrl = (process.env.RAG_SERVICE_URL || 'http://localhost:8000').replace(/\/$/, '');
+  const cleanPath = path.startsWith('/') ? path : `/${path}`;
+  return `${baseUrl}${cleanPath}`;
+};
 
 export interface RagSource {
   id: number;
@@ -31,7 +35,7 @@ export class RagService {
     liveWeather?: any
   ): Promise<RagQueryResult> {
     try {
-      const response = await axios.post(`${RAG_SERVICE_URL}/api/rag/query`, {
+      const response = await axios.post(getRagUrl('/api/rag/query'), {
         query,
         location: location || 'Hyderabad, India',
         live_weather: liveWeather || null,
@@ -45,7 +49,7 @@ export class RagService {
 
   public static async explainMetric(metric: string, value?: any, query?: string): Promise<any> {
     try {
-      const response = await axios.post(`${RAG_SERVICE_URL}/api/rag/explain`, {
+      const response = await axios.post(getRagUrl('/api/rag/explain'), {
         metric,
         value,
         query,
@@ -63,7 +67,7 @@ export class RagService {
 
   public static async getAdvice(location: string, liveWeather: any, question?: string): Promise<any> {
     try {
-      const response = await axios.post(`${RAG_SERVICE_URL}/api/rag/advice`, {
+      const response = await axios.post(getRagUrl('/api/rag/advice'), {
         location,
         live_weather: liveWeather,
         question,
@@ -83,7 +87,7 @@ export class RagService {
 
   public static async explainAlert(alertType: string, location: string, liveWeather: any): Promise<any> {
     try {
-      const response = await axios.post(`${RAG_SERVICE_URL}/api/rag/alert-explanation`, {
+      const response = await axios.post(getRagUrl('/api/rag/alert-explanation'), {
         alert_type: alertType,
         location,
         live_weather: liveWeather,
@@ -101,7 +105,7 @@ export class RagService {
 
   public static async getTravelAdvice(destination: string, liveWeather: any, question?: string): Promise<any> {
     try {
-      const response = await axios.post(`${RAG_SERVICE_URL}/api/rag/travel-advice`, {
+      const response = await axios.post(getRagUrl('/api/rag/travel-advice'), {
         destination,
         live_weather: liveWeather,
         question,
