@@ -120,7 +120,7 @@ export class RagService {
     }
   }
 
-  private static fallbackQuery(query: str, liveWeather: any): RagQueryResult {
+  private static fallbackQuery(query: string, liveWeather: any): RagQueryResult {
     const qLower = query.toLowerCase();
     const pop = liveWeather?.rainProbability || liveWeather?.pop || 70;
     
