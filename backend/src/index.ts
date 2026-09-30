@@ -35,11 +35,17 @@ app.use('/api', apiRouter);
 // Error Handling Middleware
 app.use(errorHandler);
 
-// Start Alert Scheduler Cron
-initAlertCron();
+// Start Alert Scheduler Cron (skip in Vercel Serverless Functions)
+if (!process.env.VERCEL) {
+  initAlertCron();
+}
 
-// Start Server
-app.listen(PORT, () => {
-  logger.info(`🌤️ MausamLive Backend Server running on http://localhost:${PORT}`);
-});
+// Start Server locally
+if (!process.env.VERCEL) {
+  app.listen(PORT, () => {
+    logger.info(`🌤️ MausamLive Backend Server running on http://localhost:${PORT}`);
+  });
+}
+
+export default app;
 
