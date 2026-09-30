@@ -2,12 +2,16 @@
 const nextConfig = {
   reactStrictMode: true,
   async rewrites() {
-    return [
-      {
-        source: '/api/:path*',
-        destination: 'http://localhost:5000/api/:path*',
-      },
-    ];
+    // Local development fallback when not running under Vercel Services
+    if (process.env.NODE_ENV === 'development' && !process.env.VERCEL) {
+      return [
+        {
+          source: '/api/:path*',
+          destination: 'http://localhost:5000/api/:path*',
+        },
+      ];
+    }
+    return [];
   },
 };
 
